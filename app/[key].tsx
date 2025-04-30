@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { useScreensStore } from '@/stores/useScreensStore';
+import LayoutRenderer, { LayoutNode } from '@/components/LayoutRenderer';
 
 type Params = { key: string };
 
@@ -19,10 +20,10 @@ export default function DetailScreen() {
   }, [key]);
 
   function getCode() {
-    try {
-      return JSON.stringify(meta.code)
-    }
-    catch {
+    console.log(meta.code)
+    if(typeof meta.code === "string") {
+      return {type: "text", text: "Invalid"}
+    } else {
       return meta.code
     }
   }
@@ -38,7 +39,7 @@ export default function DetailScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{meta.title}</Text>
-      {getCode()}
+      <LayoutRenderer layout={[getCode() as any as LayoutNode]}></LayoutRenderer>
     </View>
   );
 }
